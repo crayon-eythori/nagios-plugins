@@ -117,17 +117,7 @@ if [ $PAR_WARN -ge $PAR_CRIT ]; then
         exit $exitstatus
 fi
 
-cookiefile=/tmp/check_ironport_cookie-$HOSTNAME
-#echo $cookiefile
-if [ -e $cookiefile ]; then
-    wget --http-user=$USER --http-password=$PASSWORD --load-cookies $cookiefile --save-cookies $cookiefile --no-check-certificate --no-proxy https://$HOSTNAME/xml/status --output-document=$STATUSFILE  >> /dev/null 2>&1
-else
-    wget --http-user=$USER --http-password=$PASSWORD --save-cookies $cookiefile --no-check-certificate --no-proxy https://$HOSTNAME/xml/status --output-document=$STATUSFILE  >> /dev/null 2>&1
-fi
-
-#wget --http-user=$USER --http-password=$PASSWORD --no-check-certificate https://$HOSTNAME/xml/status --output-document=$STATUSFILE  >> /dev/null 2>&1
-
-
+wget -T 120 --http-user=$USER --http-password=$PASSWORD --no-check-certificate https://$HOSTNAME/xml/status --output-document=$STATUSFILE  >> /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
   exitstatus=${STATE_UNKNOWN}
